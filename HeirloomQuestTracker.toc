@@ -1,6 +1,6 @@
-## Interface: 70000
+## Interface: 70100
 ## Title: |cff00ff00Heirloom Quest Tracker|r
-## Version: |cffFF4500v1.0.4|r
+## Version: |cffFF4500v1.0.5|r
 ## Author: |cffDA70D6LownIgnitus|r aka Mihkael
 ## X-Author-Server: Alexstrasza US
 ## X-Website: https://www.facebook.com/groups/LownIgnitusAddOns/
