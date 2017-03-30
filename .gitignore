@@ -45,3 +45,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+.svn/entries
+.svn/pristine/04/042bb9660ff696a8f385de620cec9f8e962e2768.svn-base
+.svn/pristine/05/05acdb3477d58d6d748fd8c334f8cf54e079978b.svn-base
+*.svn-base
+.svn/wc.db
+*.dat
+.svn/wc.db-journal
