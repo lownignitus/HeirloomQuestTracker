@@ -1,14 +1,15 @@
 ## Interface: 70200
 ## Title: |cff00ff00Heirloom Quest Tracker|r
-## Version: |cffFF4500v1.0.6|r
+## Version: |cffFF4500v1.0.7|r
 ## Author: |cffDA70D6LownIgnitus|r aka Mihkael
 ## X-Author-Server: Alexstrasza US
 ## X-Website: https://www.facebook.com/groups/LownIgnitusAddOns/
-## X-Date: 30/03/2017
+## X-Date: 30/05/2017
 ## Notes: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 ## X-Category: Quest
 
 ## Dependencies: 
+## OptionalDeps: AceAddon-3.0, AceConfig-3.0, AceConsole-3.0, AceDB-3.0, AceEvent-3.0, AceGUI-3.0, AceLocale-3.0, LibDataBroker-1.1, LibDBIcon-1.0, LibQTip-1.0, LibStub
 ## SavedVariables: HeirloomQuestTrackerDB
 
 embeds.xml

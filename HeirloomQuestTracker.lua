@@ -1,6 +1,6 @@
 -- Title: Heirloom Quest Tracker
 -- Author: LownIgnitus
--- Version: 1.0.6
+-- Version: 1.0.7
 -- Desc: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 
 -- Globals
@@ -37,7 +37,7 @@ textures.armorTwo = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Armor02:18|t"
 textures.weaponOne = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Weapon01:18|t"
 textures.weaponTwo = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Weapon02:18|t"
 
-SLASH_HEIRLOOMQUESTTRACKER1 = '/HQT' or '/hqt'
+--SLASH_HEIRLOOMQUESTTRACKER1 = '/HQT' or '/hqt'
 
 local addonName = "HeirloomQuestTracker";
 local LDB = LibStub("LibDataBroker-1.1", true)
@@ -423,6 +423,7 @@ local options = {
 
 function HeirloomQuestTracker:GetDentedCoins() 
 	local itemCount = GetItemCount(coinID)
+	itemCount = itemCount + GetItemCount(coinID, true)
 --	print("itemCount: " .. itemCount)
 	
 	if not dentedCoins then
