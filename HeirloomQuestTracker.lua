@@ -1,6 +1,6 @@
 -- Title: Heirloom Quest Tracker
 -- Author: LownIgnitus
--- Version: 1.0.7
+-- Version: 1.0.8
 -- Desc: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 
 -- Globals
@@ -422,16 +422,16 @@ local options = {
 }
 
 function HeirloomQuestTracker:GetDentedCoins() 
-	local itemCount = GetItemCount(coinID)
-	itemCount = itemCount + GetItemCount(coinID, true)
+	local itemCount = GetItemCount(coinID, true)
 --	print("itemCount: " .. itemCount)
 	
 	if not dentedCoins then
 		dentedCoins = {}
 		dentedCoins.count = {}
+	else
+		dentedCoins.count = 0
+		dentedCoins.count = itemCount
 	end
-
-	dentedCoins.count = itemCount
 
 	return dentedCoins
 end
