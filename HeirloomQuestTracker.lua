@@ -1,6 +1,6 @@
 -- Title: Heirloom Quest Tracker
 -- Author: LownIgnitus
--- Version: 1.0.8
+-- Version: 1.0.9
 -- Desc: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 
 -- Globals
