@@ -20,12 +20,13 @@ local eventCoins = {
 local eventCurrency = {
 	{ id = 241}, -- Argent Tourny Seals
 	{ id = 515}, -- DMF Tickets
-	{ id = 392}, -- Honor
+--	{ id = 392}, -- Honor
 	{ id = 1166}, -- TW Badges
 }
 
 for k, v in pairs(eventCurrency) do
-	v.name, _, v.texture = GetCurrencyInfo(v.id)
+	v.name, v.amount, v.texture = GetCurrencyInfo(v.id)
+--	print(v.name .. " " .. v.amount .. " " .. v.texture)
 end
 
 local textures = {}
@@ -440,7 +441,7 @@ function HeirloomQuestTracker:GetCurrencyOptions()
 	itemslist = {}
 
 	for k, v in pairs(eventCurrency) do
-		itemslist[k] = "|T" .. v.texture .. ":14:14:0:0:64:64:4:60:4:60|t " .. v.name
+		itemslist[k] = "|T" .. v.texture .. ":0|t " .. v.name
 	end
 
 	return itemslist
@@ -596,7 +597,7 @@ end
 function HeirloomQuestTracker:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("HeirloomQuestTrackerDB", defaults, true)
 	if not self.db then
-		Print("Error: Database not loaded correctly.  Please exit out of WoW and delete HeirloomQuestTracker.lua found in: \\World of Warcraft\\WTF\\Account\\<Account Name>>\\SavedVariables\\")
+		Print("Error: Database not loaded correctly.  Please exit out of WoW and delete HeirloomQuestTracker.lua found in: \\World of Warcraft\\_retail_\\WTF\\Account\\<<Account Name>>\\SavedVariables\\")
 	end
 
 	LDBIcon:Register(addonName, HeirloomQuestTrackerLauncher, self.db.global.MinimapButton)
@@ -855,8 +856,8 @@ function HeirloomQuestTracker:GetCurrencyStatus()
 	eventCurrencies.currency = {}
 
 	for k, v in pairs(eventCurrency) do
-		_, balance = GetCurrencyInfo(v.id)
-		eventCurrencies.currency[v.id] = balance
+--		_, balance = GetCurrencyInfo(v.id)
+		eventCurrencies.currency[v.id] = v.amount
 	end
 
 	return eventCurrencies
