@@ -7,14 +7,15 @@
 --local L = LibStub("AceLocale-3.0"):GetLocale("HeirloomQuestTracker")
 HeirloomQuestTracker = LibStub("AceAddon-3.0"):NewAddon("HeirloomQuestTracker", "AceConsole-3.0", "AceEvent-3.0");
 
+local ran = 0
 local coinID = 122618
-local coinIcon = "Interface\\ICONS\\INV_Misc_Coin_18"
+local coinIcon = 237282
 
 local eventCoins = {
-	{ id = 33226, name = "Tricky Treat", texture = "|TInterface\\ICONS\\Achievement_Halloween_Candy_01:14|t"}, -- All Hallows End Candy
-	{ id = 37829, name = "Brewfest Prize Token", texture = "|TInterface\\ICONS\\INV_Misc_Coin_01:14|t"}, -- Brewfest Tokens
-	{ id = 21100, name = "Coin of Ancestry", texture = "|TInterface\\ICONS\\INV_Misc_ElvenCoins:14|t"}, -- Elder Coins
-	{ id = 23247, name = "Burning Blossom", texture ="|TInterface\\ICONS\\INV_SummerFest_FireFlower:14|t"}, -- Midsummer Fire Fest Blossoms
+	{ id = 33226, name = "Tricky Treat", texture = 236546}, -- All Hallows End Candy
+	{ id = 37829, name = "Brewfest Prize Tokens", texture = 133784}, -- Brewfest Prize Tokens
+	{ id = 21100, name = "Coin of Ancestry", texture = 133858}, -- Elder Coins
+	{ id = 23247, name = "Burning Blossom", texture = 135263}, -- Midsummer Fire Fest Blossoms
 }
 
 local eventCurrency = {
@@ -25,21 +26,32 @@ local eventCurrency = {
 }
 
 for k, v in pairs(eventCurrency) do
-	info = C_CurrencyInfo.GetCurrencyInfo(v.id)
+	local info = C_CurrencyInfo.GetCurrencyInfo(v.id)
 	v.name = info.name
 	v.amount = info.quantity
 	v.texture = info.iconFileID
 --	print(v.name .. " " .. v.amount .. " " .. v.texture)
 end
 
+for k, v in pairs(eventCoins) do
+	local name, _, _, _, _, _, _, _, _, texture = GetItemInfo(v.id)
+	if name ~= nil then
+		v.name = name
+	elseif texture ~= nil then
+		v.texture = texture
+	end
+	v.amount = GetItemCount(v.id)
+--	print(v.name .. " " .. v.amount .. " " .. v.texture)
+end
+
 local textures = {}
-textures.alliance = "|TInterface\\FriendsFrame\\PlusManz-Alliance:18|t"
-textures.horde = "|TInterface\\FriendsFrame\\PlusManz-Horde:18|t"
-textures.incomplete = "|TInterface\\GossipFrame\\ActiveQuestIcon:18|t"
-textures.armorOne = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Armor01:18|t"
-textures.armorTwo = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Armor02:18|t"
-textures.weaponOne = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Weapon01:18|t"
-textures.weaponTwo = "|TInterface\\ICONS\\INV_Icon_HeirloomToken_Weapon02:18|t"
+textures.alliance = "|T2565243:18|t"
+textures.horde = "|T2565244:18|t"
+textures.incomplete = "|T3532316:18|t"
+textures.armorOne = "|T1097737:18|t"
+textures.armorTwo = "|T1097738:18|t"
+textures.weaponOne = "|T1097739:18|t"
+textures.weaponTwo = "|T1097740:18|t"
 
 --SLASH_HEIRLOOMQUESTTRACKER1 = '/HQT' or '/hqt'
 
@@ -454,7 +466,7 @@ function HeirloomQuestTracker:GetCoinOptions()
 	itemslist = {}
 
 	for k, v in pairs(eventCoins) do
-		itemslist[k] = v.texture .. " " .. v.name
+		itemslist[k] = "|T" .. v.texture .. ":0|t " .. v.name
 	end
 
 	return itemslist
@@ -594,7 +606,7 @@ end
 
 function HeirloomQuestTracker:ShowOptions()
 	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+--	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
 end
 
 function HeirloomQuestTracker:OnInitialize()
@@ -643,7 +655,7 @@ local function ShowHeader(tooltip, marker, headerName)
 	for k, ecoins in pairs(eventCoins) do
 		if HeirloomQuestTracker.db.global.eventCurrencyOptions.trackedCoins[ecoins.id] then
 			column = column + 1
-			tooltip:SetCell(line, column, ecoins.texture, nil, "RIGHT")
+			tooltip:SetCell(line, column, "|T" .. ecoins.texture .. ":0|t", nil, "RIGHT")
 		end
 	end
 
@@ -854,6 +866,14 @@ function HeirloomQuestTracker:GetToonInfo()
 end
 
 function HeirloomQuestTracker:GetCurrencyStatus()
+	for k, v in pairs(eventCurrency) do
+		local info = C_CurrencyInfo.GetCurrencyInfo(v.id)
+		v.name = info.name
+		v.amount = info.quantity
+		v.texture = info.iconFileID
+	--	print(v.name .. " " .. v.amount .. " " .. v.texture)
+	end
+	
 	local eventCurrencies = {}
 
 	eventCurrencies.currency = {}
@@ -867,13 +887,23 @@ function HeirloomQuestTracker:GetCurrencyStatus()
 end
 
 function HeirloomQuestTracker:GetEcoinsStatus()
+	for k, v in pairs(eventCoins) do
+		local name, _, _, _, _, _, _, _, _, texture = GetItemInfo(v.id)
+		if name ~= nil then
+			v.name = name
+		elseif texture ~= nil then
+			v.texture = texture
+		end
+		v.amount = GetItemCount(v.id)
+	--	print(v.name .. " " .. v.amount .. " " .. v.texture)
+	end
+	
 	local  eventCoin = {}
 
 	eventCoin.ecoins = {}
 
 	for k, v in pairs(eventCoins) do
-		balance = GetItemCount(v.id)
-		eventCoin.ecoins[v.id] = balance
+		eventCoin.ecoins[v.id] = v.amount
 	end
 
 	return eventCoin 
@@ -939,15 +969,15 @@ end
 
 function HeirloomQuestTracker:UPDATE_INSTANCE_INFO()
 	HeirloomQuestTracker:SaveToonInfo()
-	if LibQTip:IsAcquired("WorldBossStatusTooltip") and HeirloomQuestTracker.tooltip then
-		WorldBossStatus:ShowToolTip()
+	if LibQTip:IsAcquired("HeirloomQuestTrackerTooltip") and HeirloomQuestTracker.tooltip then
+		HeirloomQuestTracker:ShowToolTip()
 	end
 end
 
 function HeirloomQuestTracker:LFG_UPDATE_RANDOM_INFO()
 	HeirloomQuestTracker:SaveToonInfo()
-	if LibQTip:IsAcquired("WorldBossStatusTooltip") and HeirloomQuestTracker.tooltip then
-		WorldBossStatus:ShowToolTip()
+	if LibQTip:IsAcquired("HeirloomQuestTrackerTooltip") and HeirloomQuestTracker.tooltip then
+		HeirloomQuestTracker:ShowToolTip()
 	end
 end
 
@@ -955,16 +985,35 @@ function HeirloomQuestTracker:LFG_COMPLETION_REWARD()
 	RequestLFDPlayerLockInfo()
 end
 
+function HeirloomQuestTracker:PLAYER_ENTERING_WORLD()
+	self:RegisterEvent("GET_ITEM_INFO_RECEIVED");
+end
+
+function HeirloomQuestTracker:GET_ITEM_INFO_RECEIVED()
+	if ran < 4 then
+		HeirloomQuestTracker:SaveToonInfo()
+		if LibQTip:IsAcquired("HeirloomQuestTrackerTooltip") and HeirloomQuestTracker.tooltip then
+			HeirloomQuestTracker:ShowToolTip()
+		end
+		ran = ran +1
+	else
+		self:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
+	end
+end
+
 function HeirloomQuestTracker:OnEnable()
 	self:RegisterEvent("UPDATE_INSTANCE_INFO");
 	self:RegisterEvent("LFG_UPDATE_RANDOM_INFO");
-	self:RegisterEvent("LFG_COMPLETION_REWARD");	
+	self:RegisterEvent("LFG_COMPLETION_REWARD");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 end
 
 function HeirloomQuestTracker:OnDisable()
-	Self:UnregisterEvent("UPDATE_INSTANCE_INFO");
-	Self:UnregisterEvent("LFG_UPDATE_RANDOM_INFO");
-	Self:UnregisterEvent("LFG_COMPLETION_REWARD");
+	self:UnregisterEvent("UPDATE_INSTANCE_INFO");
+	self:UnregisterEvent("LFG_UPDATE_RANDOM_INFO");
+	self:UnregisterEvent("LFG_COMPLETION_REWARD");
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
+	self:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
 end
 
 --[[function SlashCmdList.HEIRLOOMQUESTTRACKER(msg)
