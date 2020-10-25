@@ -1,6 +1,6 @@
 -- Title: Heirloom Quest Tracker
 -- Author: LownIgnitus
--- Version: 1.1.1
+-- Version: 1.1.2
 -- Desc: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 
 -- Globals
@@ -25,7 +25,10 @@ local eventCurrency = {
 }
 
 for k, v in pairs(eventCurrency) do
-	v.name, v.amount, v.texture = GetCurrencyInfo(v.id)
+	info = C_CurrencyInfo.GetCurrencyInfo(v.id)
+	v.name = info.name
+	v.amount = info.quantity
+	v.texture = info.iconFileID
 --	print(v.name .. " " .. v.amount .. " " .. v.texture)
 end
 
@@ -85,7 +88,7 @@ local defaults = {
 		},
 		toonOptions = {
 			levelRestriction = true,
-			minimumLevel = 100,
+			minimumLevel = 50,
 			removeInactive = true,
 			inactivityThreshold = 28,
 			include =3,
@@ -241,7 +244,7 @@ local options = {
 							type = "range",
 							name = "Minimum Level",
 							desc = "Show Toons this level and higher.",
-							step = 1, min = 1, max = 100,
+							step = 1, min = 1, max = 60,
 							get = function(info)
 								return HeirloomQuestTracker.db.global.toonOptions.minimumLevel
 							end,
@@ -856,7 +859,7 @@ function HeirloomQuestTracker:GetCurrencyStatus()
 	eventCurrencies.currency = {}
 
 	for k, v in pairs(eventCurrency) do
---		_, balance = GetCurrencyInfo(v.id)
+--		_, balance = C_CurrencyInfo.GetCurrencyInfo(v.id)
 		eventCurrencies.currency[v.id] = v.amount
 	end
 
@@ -899,24 +902,24 @@ function HeirloomQuestTracker:GetQuestsDone(englishFaction)
 
 
 	if englishFaction == "Horde" then
-		completed1 = IsQuestFlaggedCompleted(38346) -- 1 or nil edit: true or false
+		completed1 = C_QuestLog.IsQuestFlaggedCompleted(38346) -- 1 or nil edit: true or false
 		
-		completed2 = IsQuestFlaggedCompleted(38395)
+		completed2 = C_QuestLog.IsQuestFlaggedCompleted(38395)
 		
-		completed3 = IsQuestFlaggedCompleted(38397)
+		completed3 = C_QuestLog.IsQuestFlaggedCompleted(38397)
 		
-		completed4 = IsQuestFlaggedCompleted(38404)
+		completed4 = C_QuestLog.IsQuestFlaggedCompleted(38404)
 	elseif englishFaction == "Alliance" then
-		completed1 = IsQuestFlaggedCompleted(38345) -- 1 or nil edit: true or false
+		completed1 = C_QuestLog.IsQuestFlaggedCompleted(38345) -- 1 or nil edit: true or false
 
-		completed2 = IsQuestFlaggedCompleted(38394)
+		completed2 = C_QuestLog.IsQuestFlaggedCompleted(38394)
 
-		completed3 = IsQuestFlaggedCompleted(38396)
+		completed3 = C_QuestLog.IsQuestFlaggedCompleted(38396)
 
-		completed4 = IsQuestFlaggedCompleted(38402)
+		completed4 = C_QuestLog.IsQuestFlaggedCompleted(38402)
 	end
 
---	local isCompleted = IsQuestFlaggedCompleted(firstHeroicID)
+--	local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(firstHeroicID)
 --	print("isCompleted: " .. isCompleted)
 	if not loomQuests then
 		loomQuests = {}
