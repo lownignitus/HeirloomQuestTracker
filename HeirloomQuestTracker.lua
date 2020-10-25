@@ -1,6 +1,6 @@
 -- Title: Heirloom Quest Tracker
 -- Author: LownIgnitus
--- Version: 1.1.2
+-- Version: 1.1.3
 -- Desc: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 
 -- Globals
@@ -99,11 +99,12 @@ local defaults = {
 			showMinimapButton = true,
 		},
 		toonOptions = {
+			useClass = true,
 			levelRestriction = true,
 			minimumLevel = 50,
 			removeInactive = true,
 			inactivityThreshold = 28,
-			include =3,
+			include = 3,
 		},
 		eventCurrencyOptions = {
 			trackedCurrencies = {},
@@ -192,12 +193,33 @@ local options = {
 			desc = "",
 			order = 20,
 			args = {
+				includeclassOptions = {
+					type = "group",
+					inline = true,
+					name = "Show Class",
+					desc = "",
+					order = 1,
+					args = {
+						serverOptions = {
+							type = "toggle",
+							name = "Show Class Name",
+							desc = "Show toon class name.",
+							get = function(info)
+								return HeirloomQuestTracker.db.global.toonOptions.useClass
+							end,
+							set = function(info, v)
+								HeirloomQuestTracker.db.global.toonOptions.useClass = v
+							end,
+							order = 1,
+						},
+					},
+				},
 				includetoonOptions = {
 					type = "group",
 					inline = true,
 					name = "Show Toons",
 					desc = "",
-					order = 1,
+					order = 2,
 					args = {
 						serverOptions = {
 							type = "toggle",
@@ -512,7 +534,11 @@ function HeirloomQuestTracker:DisplayToonInTooltip(toonName, toonInfo)
 		factionIcon = textures.horde
 	end
 
-	tooltip:SetCell(line, 2, factionIcon .. " " .. toonName .. " (" .. toonInfo.class .. ")")
+	if HeirloomQuestTracker.db.global.toonOptions.useClass == true then
+		tooltip:SetCell(line, 2, factionIcon .. " " .. toonName .. " (" .. toonInfo.class .. ")")
+	else
+		tooltip:SetCell(line, 2, factionIcon .. " " .. toonName)
+	end
 
 	if (toonInfo.dentedCoins) then
 		coins = toonInfo.dentedCoins.count
@@ -606,7 +632,7 @@ end
 
 function HeirloomQuestTracker:ShowOptions()
 	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
---	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
 end
 
 function HeirloomQuestTracker:OnInitialize()
