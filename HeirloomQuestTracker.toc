@@ -1,10 +1,11 @@
-## Interface: 90001
+## Interface: 90002
 ## Title: |cff00ff00Heirloom Quest Tracker|r
-## Version: |cffFF4500v1.1.3|r
+## X-Curse-Project-ID: 99713
+## Version: |cffFF4500v1.1.4|r
 ## Author: |cffDA70D6LownIgnitus|r aka Mihkael
 ## X-Author-Server: Alexstrasza-US
 ## X-Website: https://github.com/lownignitus/HeirloomQuestTracker
-## X-Date: 24/10/2020
+## X-Date: 2021/02/05
 ## Notes: Addon to track Misprinted Coins, Quest completions for free heiloom upgrades, and 1st heroic end boss kill of the day.
 ## X-Category: Quest
 
